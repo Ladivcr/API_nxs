@@ -2,7 +2,7 @@ import json
 import psycopg2
 from psycopg2.extras import execute_values
 
-DB_URL = "<CHANGE FOR YOUR URL_DB>"
+DB_URL = "<DB_URL>"
 
 
 def load_json_data(path="models.json"):
@@ -18,7 +18,6 @@ def populate_database(data):
     try:
         # 1. Obtener las marcas únicas
         brand_names = sorted(set(item["brand_name"] for item in data))
-
         # 2. Insertar marcas (evitar duplicados)
         execute_values(
             cur,
@@ -36,17 +35,22 @@ def populate_database(data):
 
         # 4. Preparar datos para insertar modelos
         model_values = [
-            (item["name"], item["average_price"], brand_map[item["brand_name"]])
+            (
+                item["id"],
+                item["name"],
+                item["average_price"],
+                brand_map[item["brand_name"]],
+            )
             for item in data
         ]
 
         execute_values(
             cur,
             """
-                INSERT INTO models (name, average_price, brand_id)
-                VALUES %s
-                ON CONFLICT (name) DO NOTHING;
-                """,
+        INSERT INTO models (id, name, average_price, brand_id)
+        VALUES %s
+        ON CONFLICT (name) DO NOTHING;
+        """,
             model_values,
         )
 
