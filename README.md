@@ -63,3 +63,42 @@ pip install poetry
 poetry init
 
 export PYTHONPATH=src
+
+Creación de la base de datos
+```sql
+
+CREATE TABLE brands (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(30) UNIQUE NOT NULL
+);
+
+
+CREATE TABLE models (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(70) UNIQUE NOT NULL,
+    average_price DECIMAL(10,2),
+    brand_id INTEGER,
+    CONSTRAINT fk_brand FOREIGN KEY (brand_id) REFERENCES brands(id)
+);
+```
+
+Script para revisar duplicados
+```python
+
+import json
+from collections import Counter
+
+# Cargar el JSON
+with open("models.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+# Contar cuántas veces aparece cada name
+name_counts = Counter(item["name"] for item in data)
+
+# Mostrar solo los que están duplicados
+duplicates = {name: count for name, count in name_counts.items() if count > 1}
+
+print("🚨 Modelos duplicados por name:")
+for name, count in duplicates.items():
+    print(f"- {name} (aparece {count} veces)")
+```

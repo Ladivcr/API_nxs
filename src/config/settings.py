@@ -6,7 +6,6 @@ from loguru import logger  # NOQA
 from pydantic import AnyHttpUrl
 from pydantic_settings import BaseSettings
 
-pass
 
 env_file = dotenv_values("src/config/.env")
 
