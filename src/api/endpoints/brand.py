@@ -2,10 +2,16 @@ from fastapi import APIRouter
 
 from config.settings import logger
 from services.brands import brand_service
+from services.models import model_service
+from schemas.brands import BrandCreateSchema
+from schemas.models import CreateModelSchema
+import json
+from fastapi.responses import JSONResponse
+
 router = APIRouter(prefix="/brands")
 
 
-# GET    /brands
+# GET    /brands [OK]
 @router.get(
     "",
 )
@@ -17,33 +23,65 @@ async def get_brands():
     return response
 
 
-# GET    /brands/:id/models
+# GET    /brands/:id/models [OK]
 @router.get(
     "/{brand}/models",
 )
 async def get_models_brand(brand: str):
     """Get model of brand from database
-    
-    Args: 
+
+    Args:
         brand (str): brand name.
-    
+
     """
-    logger.info("Getting brand in progress... - STATUS: STARTED")
-    response = brand_service.list_brands(brand_name=brand)
-    logger.success("Getting brand finished - STATUS: OK")
-    return response
-    return None
+    logger.info("Getting brands by model in progress... - STATUS: STARTED")
+    normalized_name = brand.title()
+    response_brands = brand_service.list_brands(
+        brand_name=normalized_name, struct_response=False
+    )
+    response_model = model_service.list_models(
+        brand_id=json.loads(response_brands.body)[0]["id"]
+    )
+    logger.success("Getting brands model finished - STATUS: OK")
+    return response_model
 
 
 # POST /brands
 @router.post("")
-async def add_brand():
+async def add_brand(brand: BrandCreateSchema):
     """Add a new brand to db."""
-    return None
+    logger.info("Create a new brand in progress... - STATUS: STARTED")
+    normalized_name = brand.name.title()
+    response_brand = brand_service.create_new_brand(brand_name=normalized_name)
+    logger.success("Create a new brand finished - STATUS: OK")
+    return response_brand
 
 
 # POST /brands/:id/models
-@router.post("/{item_id}/models")
-async def add_model_brand(item_id: str):
-    """Add a new model of brand to db."""
-    return None
+@router.post("/{brand}/models")
+async def add_model_brand(brand: str, model: CreateModelSchema):
+    """Add a new model linked to a brand.
+    Args:
+        brand (str): brand name linked to the model.
+    """
+    logger.info("Create a new model in progress... - STATUS: STARTED")
+    if model.average_price is not None and model.average_price < 100000:
+        return JSONResponse(
+            status_code=400,
+            content={"error": "average price can't be less than 100,000!"},
+        )
+
+    normalized_name = brand.title()
+    response_brands = brand_service.list_brands(
+        brand_name=normalized_name, struct_response=False
+    )
+    if len(json.loads(response_brands.body)) == 0:
+        return JSONResponse(
+            status_code=400,
+            content={"error": f"brand '{normalized_name}' does not exist in database!"},
+        )
+
+    brand_id = json.loads(response_brands.body)[0]["id"]
+    response_model = model_service.create_new_model(data_model=model, brand_id=brand_id)
+    logger.success("Create a new model finished - STATUS: OK")
+    return response_model

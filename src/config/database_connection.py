@@ -1,9 +1,9 @@
 from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.pool import NullPool
 
 from config.settings import logger, settings
+
 
 @contextmanager
 def open_connection_db():
@@ -13,11 +13,11 @@ def open_connection_db():
     Session = scoped_session(session_open)
     session_alive = Session()
     session_alive.expire_on_commit = False
-    try: 
+    try:
         logger.success("Connection: Open.")
         yield session_alive
         session_alive.commit()
-    except Exception as e: 
+    except Exception as e:
         session_alive.rollback()
         raise e
     finally:
