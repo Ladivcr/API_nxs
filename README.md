@@ -102,3 +102,9 @@ print("🚨 Modelos duplicados por name:")
 for name, count in duplicates.items():
     print(f"- {name} (aparece {count} veces)")
 ```
+
+
+> poetry run pytest
+
+> poetry run pytest --cov=src
+pre-commit run --all-files

@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from schemas.brands import BrandSchema
 
 
-class BranService:
+class BrandService:
     """Class to struct responses from database."""
 
     def _struct_response(self, data):
@@ -78,4 +78,4 @@ class BranService:
             )
 
 
-brand_service = BranService()
+brand_service = BrandService()
