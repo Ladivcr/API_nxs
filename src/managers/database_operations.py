@@ -1,4 +1,4 @@
-from config.database import open_db_connection
+from config.manage_session import manage_connection
 from config.settings import logger
 
 pass
@@ -7,7 +7,7 @@ pass
 class GeneralOperationsDB:
     """Class to manage all general direct operations to database."""
 
-    @open_db_connection
+    @manage_connection
     def ping_db(self, cursor) -> bool:
         cursor.execute("SELECT 1;")
         result = cursor.fetchone()

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from config.settings import logger
-
+from services.brands import brand_service
 router = APIRouter(prefix="/brands")
 
 
@@ -10,18 +10,28 @@ router = APIRouter(prefix="/brands")
     "",
 )
 async def get_brands():
-    """Get brands from database"""
+    """List all brands from database"""
     logger.info("Getting brands in progress... - STATUS: STARTED")
-    return None
+    response = brand_service.list_brands()
+    logger.success("Getting brands finished - STATUS: OK")
+    return response
 
 
 # GET    /brands/:id/models
 @router.get(
-    "/{item_id}/models",
+    "/{brand}/models",
 )
-async def get_models_brand(item_id: str):
-    """Get model of brand from database"""
+async def get_models_brand(brand: str):
+    """Get model of brand from database
+    
+    Args: 
+        brand (str): brand name.
+    
+    """
     logger.info("Getting brand in progress... - STATUS: STARTED")
+    response = brand_service.list_brands(brand_name=brand)
+    logger.success("Getting brand finished - STATUS: OK")
+    return response
     return None
 
 
