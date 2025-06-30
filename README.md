@@ -6,9 +6,9 @@
 - ¿Cómo correr este proyecto?
 - - Modo Local (Ideal para nuevos miembros)
 - - - 1. Base de datos
-- - - 2. Populación de la base de datos
-- - - 3. Descarga e instalación de dependencias del proyecto
-
+- - - 2. Descarga e instalación de dependencias del
+proyecto
+- - - 3. Populación de la base de datos
 
 # Vista General
 Proyecto realizado para llevar a cabo la prueba técnica de Nexus. Aquí encontrará el proceso para llevar a cabo el levantamiento del proyecto para validar su función. Así como observaciones, mejoras y decisiones técnicas tomadas durante el desarrollo.
@@ -124,7 +124,58 @@ CREATE TABLE models (
 Si todo salio bien. Deberiamos de poder ver las tablas en su apartado correspondiente.
 ![Tablas creadas.](img_docs/pgadmin_7_tablascreadas.png)
 
-### 2: Populación de la base de datos
+### 2: Descarga e instalación de dependencias del proyecto
+En lo personal recomiendo usar un entorno virtual de python con la herramienta **Pyenv** ya que tienes acceso a versiones de python especificas (esteproyecto usa python3.11) pero también es posible usar los entornos virtuales que ya vienen por defecto con Python3.x
+
+Hacer uso de un etorno virtual nos permitirá llevar mejor control de las librerias utilizadas en el proyecto y evitaremos instalar todas esas librerias en nuestro equipo.
+
+Ejecute los comandos en el siguiente orden
+```Python
+# Creacion de una carpeta para trabajo
+mkdir Work
+cd Work
+# Descarga del proyecto
+git clone https://github.com/Ladivcr/API_nxs.git
+cd API_nxs
+
+# Creamos nuestro entorno
+python -m venv nombre_del_entorno
+# Linux/Mac
+source nombre_del_entorno/bin/activate
+# Windows
+nombre_del_entorno\Scripts\activate.bat
+```
+La consola deberá mostrar algo similar cuando el entorno este acrivo
+```
+(nombre_del_entorno) $
+```
+
+Una vez que tenemos nuestro entorno, procedemos a instalar las dependencias del proyecto.
+```python
+pip install poetry
+
+# Instalar dependencias
+poetry install
+
+export PYTHONPATH=src
+
+# Correr el proyecto
+uvicorn src.main:app --reload
+
+# Otros comandos útiles
+# (ejecutar cuando no este ejecutando uvicorn src.main:app --reload)
+
+# Para correr ejecutar test
+poetry run pytest
+
+# Para ejecutar coverage
+poetry run pytest --cov=src
+
+# Para revisar el linting
+pre-commit run --all-files
+```
+
+### 3: Populación de la base de datos
 Para realizar el llenado de la base de datos es necesario ejecutar el script: **populate_script.py** que a su vez, hace uso del archivo **models.json**
 
 Antes de proceder a correr el script, es necesario actualizar la variable: **DB_URL**
@@ -166,55 +217,3 @@ for name, count in duplicates.items():
 ```
 Modelos duplicados
 ![Script de dúplicados ejecutado con éxito.](img_docs/script_duplicados.jpg)
-
-
-### 3: Descarga e instalación de dependencias del proyecto
-En lo personal recomiendo usar un entorno virtual de python con la herramienta **Pyenv** ya que tienes acceso a versiones de python especificas (esteproyecto usa python3.11) pero también es posible usar los entornos virtuales que ya vienen por defecto con Python3.x
-
-Hacer uso de un etorno virtual nos permitirá llevar mejor control de las librerias utilizadas en el proyecto y evitaremos instalar todas esas librerias en nuestro equipo.
-
-Ejecute los comandos en el siguiente orden
-```Python
-# Creacion de una carpeta para trabajo
-mkdir Work
-cd Work
-# Descarga del proyecto
-git clone <URL DEL PROYECTO>
-cd API_nxs
-
-# Creamos nuestro entorno
-python -m venv nombre_del_entorno
-# Linux/Mac
-source nombre_del_entorno/bin/activate
-# Windows
-nombre_del_entorno\Scripts\activate.bat
-```
-La consola deberá mostrar algo similar cuando el entorno este acrivo
-```
-(nombre_del_entorno) $
-```
-
-Una vez que tenemos nuestro entorno, procedemos a instalar las dependencias del proyecto.
-```python
-pip install poetry
-
-# Instalar dependencias
-poetry install
-
-export PYTHONPATH=src
-
-# Correr el proyecto
-uvicorn src.main:app --reload
-
-# Otros comandos útiles
-# (ejecutar cuando no este ejecutando uvicorn src.main:app --reload)
-
-# Para correr ejecutar test
-poetry run pytest
-
-# Para ejecutar coverage
-poetry run pytest --cov=src
-
-# Para revisar el linting
-pre-commit run --all-files
-```
