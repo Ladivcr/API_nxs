@@ -2,7 +2,7 @@ import json
 import psycopg2
 from psycopg2.extras import execute_values
 
-DB_URL = "<DB_URL>"
+DB_URL = "postgresql://USER:PASSWORD@localhost:5432/DB_NAME"
 
 
 def load_json_data(path="models.json"):
