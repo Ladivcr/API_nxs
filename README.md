@@ -210,8 +210,34 @@ STATUS 404 NOT FOUND
 ![Consumo de endpoint models.](img_docs/endpoint_get_filters.png)
 
 
+# Mejoras y decisiones durante el desarrollo
+A continuación se listan las diferentes mejoras que se realizarían al proyecto en caso de contar con más tiempo:
+- Implementación de páginación para un mejor consumo por parte de desarrolladores.
+- Más filtros para los endpoints de tipo GET.
+- Mejorar la documentación.
+- Añadir más test unitarios.
+- Añadir pruebas de estres.
+- Realizar pruebas de seguridad OWASP TOP 10 enfocadas en API.
+- Implementación de un gestor de errores como Sentry.
+- Estandarización de respuesta en la base de datos.
+- Optimización de consultas a la base de datos.
+- Eliminación de código duplicado.
+- Implementación de otros métodos.
+- Mejora de la documentación generada por Swagger.
+- Archivo MAKE para automatizar el levantamiento del proyecto y reducir algunos pasos manuales.
 
-## Modo Local (Solo si tienes Python3.11)
+A continuación se detallan algunas de las decisiones técnicas tomadas durante el desarrollo.
+
+Para el manejo de los datos que se proveen mediante los métodos POST, se hace uso a nivel código de Schemas y funciones parámetrizadas. Esto con la finalidad de evitar posibles inyecciones de código [CWE-98](https://cwe.mitre.org/data/definitions/94.html).
+
+Para el uso de filtros mediante métodos GET se hace uso de consultas parámetrizadas a la base de datos, mediante el uso de [SQLAlchemy](https://www.sqlalchemy.org/), con la finalidad de mitigar una posible inyección SQL [CWE-89](https://cwe.mitre.org/data/definitions/89.html) que pudiera exfiltrar información interna de la base de datos.
+
+Como se habrá notado, en los métodos GET y POST (brands by models y models by brand respectivamente) se maneja como ID el nombre de la marca o del modelo y no el ID del registro en la base de datos. Esto se ha decidido así para aprovechar el hecho de que ambos campos, por la naturaleza del diseño, sus valores son únicos en la base de datos. Al hacer uso de esos campos y no del ID del registro per se, se mitiga una posible vulnerabilidad IDOR ([Insecure Direct Object Reference](https://blog.hackmetrix.com/insecure-direct-object-reference/)) [CWE-639](https://cwe.mitre.org/data/definitions/639.html).
+
+
+
+# Anexo
+## Montar el proyecto modo manual (Solo si tienes Python3.11) TL, DR
 Si quieres ejecutar este proyecto de manera local, para realizar pruebas o modificaciones. Hay preparativos que se deben realizar antes. Sigue los siguientes pasos en orden y al final tendrás el proyecto listo para probar de manera local.
 
 ### 1: Base de datos
