@@ -37,7 +37,7 @@ async def get_models(
 ):
     """Get all modelsfrom db."""
     logger.info("Getting models by filter in progress... - STATUS: STARTED")
-    if lower > greater:
+    if (lower is not None and greater is not None) and lower > greater:
         return JSONResponse(
             status_code=400,
             content={"error": "lower parameter can't be greater than greater parameter!"},

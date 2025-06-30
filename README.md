@@ -138,15 +138,76 @@ El entorno tiene seis endpoints:
 > **:model_name, :brand_name** son variables (Path Variables). En Postman se usan de esa manera.
 
 ## GET: health-check
-- URL: localhost:8000/health-check
+- URL: **localhost:8000/health-check**
 - Body: N/A
+- Query Params: N/A
+- Path Variables: N/A
+
+STATUS 200 OK
+![Consumo de endpoint health-check.](img_docs/endpoint_health.png)
 
 ## GET: brands
+- URL: **localhost:8000/v1/brands**
+- Body: N/A
+- Query Params: N/A
+- Path Variables: N/A
+
+STATUS 200 OK
+![Consumo de endpoint brands.](img_docs/endpoint_brands.png)
+
 ## GET: brands by models
+- URL: **localhost:8000/v1/brands/:brand_name/models**
+- Body: N/A
+- Query Params: N/A
+- Path Variables: brand_name (str)
+
+STATUS 200 OK
+![Consumo de endpoint brands by model.](img_docs/endpoint_brands_by_model.png)
+STATUS 404 NOT FOUND
+![Consumo de endpoint brands by model.](img_docs/endpoint_brands_by_model_not_found.png)
+
 ## POST: brands
+- URL: **localhost:8000/v1/brands**
+- Body: `{"name": "Boeing"}` (JSON)
+- Query Params: N/A
+- Path Variables: N/A
+
+STATUS 201 CREATED
+![Consumo de endpoint brands.](img_docs/endpoint_brands_post.png)
+
+STATUS 400 BAD REQUEST
+![Consumo de endpoint brands.](img_docs/endpoint_brands_post_bad_request.png)
+
 ## POST: models by brand
+- URL: **localhost:8000/v1/brands/:brand_name/models**
+- Body: `{"name": "Airplane", "average_price": 1000000}` (JSON)
+- Query Params: N/A
+- Path Variables: brand_name (str)
+
+STATUS 201 CREATED
+![Consumo de endpoint models by brands.](img_docs/endpoint_models_by_brand.png)
+
+STATUS 404 NOT FOUND
+![Consumo de endpoint models by brands.](img_docs/endpoint_models_by_brand_bad_request.png)
+
 ## PUT: models
+- URL: **localhost:8000/v1/brands/:brand_name/models**
+- Body: `{"average_price": 999999}` (JSON)
+- Query Params: N/A
+- Path Variables: brand_name (str)
+
+STATUS 201 CREATED
+![Consumo de endpoint models.](img_docs/endpoint_models_put.png)
+
+STATUS 404 NOT FOUND
+![Consumo de endpoint models.](img_docs/endpoint_models_put_not_found.png)
+
 ## GET: models
+- URL: **localhost:8000/v1/models?greater=400000&lower=380000**
+- Body: N/A
+- Query Params: greater & lower
+- Path Variables: N/A
+![Consumo de endpoint models.](img_docs/endpoint_get_filters.png)
 
 
 

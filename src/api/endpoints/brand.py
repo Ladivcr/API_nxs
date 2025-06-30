@@ -39,9 +39,16 @@ async def get_models_brand(brand: str):
     response_brands = brand_service.list_brands(
         brand_name=normalized_name, struct_response=False
     )
-    response_model = model_service.list_models(
-        brand_id=json.loads(response_brands.body)[0]["id"]
-    )
+    if len(json.loads(response_brands.body)) > 0:
+        response_model = model_service.list_models(
+            brand_id=json.loads(response_brands.body)[0]["id"]
+        )
+    else:
+        logger.success("Getting brands model finished - STATUS: OK")
+        return JSONResponse(
+            status_code=404,
+            content={"brand": f"´{normalized_name}´ not found in db."},
+        )
     logger.success("Getting brands model finished - STATUS: OK")
     return response_model
 
@@ -77,7 +84,7 @@ async def add_model_brand(brand: str, model: CreateModelSchema):
     )
     if len(json.loads(response_brands.body)) == 0:
         return JSONResponse(
-            status_code=400,
+            status_code=404,
             content={"error": f"brand '{normalized_name}' does not exist in database!"},
         )
 

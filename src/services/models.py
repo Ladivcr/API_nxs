@@ -79,7 +79,9 @@ class ModelService:
         else:
             return JSONResponse(
                 status_code=400,
-                content={"error": f"New Model '{data_model.name}' was not created!"},
+                content={
+                    "error": f"New Model '{data_model.name}' was not created! Please retry..."
+                },
             )
 
     def update_model(self, data: UpdateModelSchema):
@@ -89,7 +91,7 @@ class ModelService:
         response = models_manager.get_models(**filters)
         if len(response) == 0:
             return JSONResponse(
-                status_code=400, content={"error": f"Model '{data.name}' does not exist!"}
+                status_code=404, content={"error": f"Model '{data.name}' does not exist!"}
             )
         response = models_manager.update_model(model_data=data)
 

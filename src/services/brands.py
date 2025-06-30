@@ -52,6 +52,7 @@ class BrandService:
                 response = self._control_data_type(data=response)
             logger.success("BrandService | list_brands(): FINISHED")
             return JSONResponse(status_code=200, content=response)
+        logger.success("BrandService | list_brands(): FINISHED")
         return JSONResponse(status_code=200, content=[])
 
     def create_new_brand(self, brand_name: str):
@@ -74,7 +75,9 @@ class BrandService:
         else:
             return JSONResponse(
                 status_code=400,
-                content={"error": f"New Brand '{brand_name}' was not created!"},
+                content={
+                    "error": f"New Brand '{brand_name}' was not created! Please retry..."
+                },
             )
 
 
