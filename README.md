@@ -6,7 +6,7 @@
 - ¿Cómo correr este proyecto?
 - - Modo Local (Ideal para nuevos miembros)
 - - - 1. Base de datos
-- - - 2. Descarga e instalación de dependencias del
+- - - 2. Descarga e instalación de dependencias del 
 proyecto
 - - - 3. Populación de la base de datos
 
@@ -18,7 +18,7 @@ Proyecto realizado para llevar a cabo la prueba técnica de Nexus. Aquí encontr
 ## Modo Local
 Para poder llevar a cabo los siguientes pasos, es necesario contar con las siguientes herramientas instaladas en el sistema:
 - Docker
-- Python 3.x
+- Python >= 3.11, <4.0 
 
 Si quieres ejecutar este proyecto de manera local, para realizar pruebas o modificaciones. Hay preparativos que se deben realizar antes. Sigue los siguientes pasos en orden y al final tendrás el proyecto listo para probar de manera local.
 
@@ -125,7 +125,10 @@ Si todo salio bien. Deberiamos de poder ver las tablas en su apartado correspond
 ![Tablas creadas.](img_docs/pgadmin_7_tablascreadas.png)
 
 ### 2: Descarga e instalación de dependencias del proyecto
-En lo personal recomiendo usar un entorno virtual de python con la herramienta **Pyenv** ya que tienes acceso a versiones de python especificas (esteproyecto usa python3.11) pero también es posible usar los entornos virtuales que ya vienen por defecto con Python3.x
+En lo personal recomiendo usar un entorno virtual de python con la herramienta **Pyenv** ya que tienes acceso a versiones de python especificas (esteproyecto usa python3.11) pero también es posible usar los entornos virtuales que ya vienen por defecto con Python3.11
+
+> Si usarás los entornos virtuales que vienen por defecto con python. Es imperativo que tengas python3.11 instalado en la computadora. 
+
 
 Hacer uso de un etorno virtual nos permitirá llevar mejor control de las librerias utilizadas en el proyecto y evitaremos instalar todas esas librerias en nuestro equipo.
 
@@ -135,11 +138,11 @@ Ejecute los comandos en el siguiente orden
 mkdir Work
 cd Work
 # Descarga del proyecto
-git clone https://github.com/Ladivcr/API_nxs.git
+git clone <URL DEL PROYECTO>
 cd API_nxs
 
 # Creamos nuestro entorno
-python -m venv nombre_del_entorno
+python3 -m venv nombre_del_entorno
 # Linux/Mac
 source nombre_del_entorno/bin/activate
 # Windows
@@ -149,6 +152,7 @@ La consola deberá mostrar algo similar cuando el entorno este acrivo
 ```
 (nombre_del_entorno) $
 ```
+![Entorno creado.](img_docs/entorno.png)
 
 Una vez que tenemos nuestro entorno, procedemos a instalar las dependencias del proyecto.
 ```python
@@ -217,3 +221,5 @@ for name, count in duplicates.items():
 ```
 Modelos duplicados
 ![Script de dúplicados ejecutado con éxito.](img_docs/script_duplicados.jpg)
+
+
