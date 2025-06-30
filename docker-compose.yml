@@ -2,6 +2,46 @@ version: '3.4'
 
 services:
   fast_api:
+    container_name: local_fast_api
     build: .
     ports:
       - 8000:8000
+    networks:
+      - nexus-network
+    depends_on:
+      - db # Debe estar definido en la misma red
+  db:
+    image: postgres
+    container_name: local_pgdb_admin
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: toor
+      POSTGRES_PASSWORD: toor
+    volumes:
+      - local_pgdata:/var/lib/postgresql/data
+    networks:
+      - nexus-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: local_pgadmin4_container
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: nexus@email.com
+      PGADMIN_DEFAULT_PASSWORD: nexus
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - nexus-network
+
+networks:
+  nexus-network:
+    external: true
+
+volumes:
+  local_pgdata:
+  pgadmin-data:

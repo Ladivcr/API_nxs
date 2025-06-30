@@ -14,6 +14,7 @@ DOCKER_ENV_PATH = "config/.env"
 env_path = LOCAL_ENV_PATH if os.path.exists(LOCAL_ENV_PATH) else DOCKER_ENV_PATH
 env_file = dotenv_values(env_path)
 
+
 class BaseConfig(BaseSettings):
     """Global configurations."""
 

@@ -19,7 +19,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 COPY ./pyproject.toml ./poetry.lock* /tmp/
 
 # Versión 1.7.0 que es compatible con poetry 1.8.x
-RUN poetry self add "poetry-plugin-export==1.7.0"
+RUN poetry self add poetry-plugin-export
 
 # Exportar las dependencias a requirements.txt y luego instalar
 RUN cd /tmp && poetry export -f requirements.txt --output /app/requirements.txt --without-hashes --with dev \
