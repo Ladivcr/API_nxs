@@ -5,10 +5,14 @@ from dotenv import dotenv_values
 from loguru import logger  # NOQA
 from pydantic import AnyHttpUrl
 from pydantic_settings import BaseSettings
+import os
 
 
-env_file = dotenv_values("src/config/.env")
+LOCAL_ENV_PATH = "src/config/.env"
+DOCKER_ENV_PATH = "config/.env"
 
+env_path = LOCAL_ENV_PATH if os.path.exists(LOCAL_ENV_PATH) else DOCKER_ENV_PATH
+env_file = dotenv_values(env_path)
 
 class BaseConfig(BaseSettings):
     """Global configurations."""
