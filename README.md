@@ -1,9 +1,30 @@
 # Nexus API - Prueba Técnica
+# Indice
+- Vista General
+- ¿Cómo correr este proyecto?
+- - Consumo Online
+- - Modo Dockerizado y recomendado
+- ¿Cómo consumir los endpoints?
+- - GET: health-check
+- - GET: brands
+- - GET: brands by models
+- - POST: brands
+- - POST: Models by brand
+- - PUT: Models
+- - GET: Models
+- Mejoras y decisiones durante el desarrollo
+- Anexo
+- - Montar el proyecto modo manual
+- - Ejecución de Test (válido solo en modo manual)
+- - Ejecución del linting (válido en todo el proyecto)
 
 # Vista General
 Proyecto realizado para llevar a cabo la prueba técnica de Nexus. Aquí encontrará el proceso para llevar a cabo el levantamiento del proyecto para validar su función. Así como observaciones, mejoras y decisiones técnicas tomadas durante el desarrollo.
 
 # ¿Cómo correr este proyecto?
+
+> NOTA: Si no quieres levantar el proyecto para probarlo en local. Puedes consumir la API directamente desde Internet. Pasa al apartado: **¿Cómo consumir los endpoints?** para ver cómo hacerlo.
+
 Para poder llevar a cabo los siguientes pasos, es necesario contar con las siguientes herramientas instaladas en el sistema:
 - Docker
 - Python >= 3.11, <4.0
@@ -27,8 +48,18 @@ Una vez realizado lo anterior y posicionados en la carpeta del proyecto, procede
 
 **!** Antes de levantar el contenedor. Por favor revisa el archivo .env.txt en la ruta **src/config**.
 
-Ya que es un archivo que se usa internamente en los contenedores. Lee lo que dice. Básicamente, eliminar la extensión. Notese que la variable de entorno no es crítica. Se ha añadido para facilitar la revisión a la persona que revise este proyecto. Pero en un entorno de producción, añadir las variables en el repositorio es una mala práctica.
+Ya que es un archivo que se usa internamente en los contenedores. Lee lo que dice. Básicamente, eliminar la extensión.
+Puedes hacer: `mv .env.txt .env`
 
+Una vez hecho, vuelvete a posicionar al mismo nivel de la carpeta src.
+
+De tal manera que si haces: `ls`
+obtengas de salida:
+`Dockerfile README.md docker-compose.yml img_docs poetry.lock pyproject.toml src`
+
+Notese que la variable de entorno del archivo **.env** no es crítica. Se ha añadido para facilitar la revisión a la persona que revise este proyecto. Pero en un entorno de producción, añadir las variables en el repositorio es una mala práctica.
+
+Continuemos.
 
 ```bash
 # creación de la red útilizada en los contenedores
@@ -41,7 +72,9 @@ Si todo salio bien. Deberíamos de ver algo como lo siguiente:
 ![Ejecución de docker build docker build.](img_docs/docker_build.png)
 
 
-3. **Creación de la base de datos.**
+3. **Conexión a la base de datos mediante pgadmin (opcional).**
+> Este paso es opcional, si quieres visualizar los datos en el administrador de postgres.
+En caso de que no quieras, puedes pasar al paso 4.
 
 Lo anterior nos realizará el levantamiento de los tres contenedores.
 - Nuestra API (local_fast_api).
@@ -68,7 +101,7 @@ Posteriormente, en la pestaña de **Connection**, llenamos los datos con los que
 
 ![Registro de conexión.](img_docs/pgadmin_3_registerdb.jpg)
 
-Si todo ha salidos bien, debemos de ser capaces de de ver la base de datos **toor** entre las bases de datos.
+Si todo ha salidos bien, debemos de ser capaces de ver la base de datos **toor** entre las bases de datos (guiño a tor browser).
 ![base de datos creada.](img_docs/pgadmin_4_db.jpg)
 
 > La URL de las bases de datos en PostgreSQL se compone de la siguiente manera:
@@ -133,21 +166,26 @@ El entorno tiene seis endpoints:
 - GET - **{{BASE_URL}}/v1/models?greater=400000&lower=380000**
   Listado de modelos con filtros por average_price
 
+> // En el caso de que se este probando de manera local
 > **{{BASE_URL}}** = localhost:8000
+> // En caso de que se este consumiendo por Internet
+> **{{BASE_URL}}** = 44.249.160.11
 
 > **:model_name, :brand_name** son variables (Path Variables). En Postman se usan de esa manera.
 
 ## GET: health-check
-- URL: **localhost:8000/health-check**
+- URL: **{{BASE_URL}}/health-check**
 - Body: N/A
 - Query Params: N/A
 - Path Variables: N/A
 
-STATUS 200 OK
+STATUS 200 OK - LOCAL
 ![Consumo de endpoint health-check.](img_docs/endpoint_health.png)
+STATUS 200 OK - ONLINE
+![Consumo de endpoint health-check.](img_docs/check_online.png)
 
 ## GET: brands
-- URL: **localhost:8000/v1/brands**
+- URL: **{{BASE_URL}}/v1/brands**
 - Body: N/A
 - Query Params: N/A
 - Path Variables: N/A
@@ -156,7 +194,7 @@ STATUS 200 OK
 ![Consumo de endpoint brands.](img_docs/endpoint_brands.png)
 
 ## GET: brands by models
-- URL: **localhost:8000/v1/brands/:brand_name/models**
+- URL: **{{BASE_URL}}/v1/brands/:brand_name/models**
 - Body: N/A
 - Query Params: N/A
 - Path Variables: brand_name (str)
@@ -167,7 +205,7 @@ STATUS 404 NOT FOUND
 ![Consumo de endpoint brands by model.](img_docs/endpoint_brands_by_model_not_found.png)
 
 ## POST: brands
-- URL: **localhost:8000/v1/brands**
+- URL: **{{BASE_URL}}/v1/brands**
 - Body: `{"name": "Boeing"}` (JSON)
 - Query Params: N/A
 - Path Variables: N/A
@@ -179,7 +217,7 @@ STATUS 400 BAD REQUEST
 ![Consumo de endpoint brands.](img_docs/endpoint_brands_post_bad_request.png)
 
 ## POST: models by brand
-- URL: **localhost:8000/v1/brands/:brand_name/models**
+- URL: **{{BASE_URL}}/v1/brands/:brand_name/models**
 - Body: `{"name": "Airplane", "average_price": 1000000}` (JSON)
 - Query Params: N/A
 - Path Variables: brand_name (str)
@@ -191,7 +229,7 @@ STATUS 404 NOT FOUND
 ![Consumo de endpoint models by brands.](img_docs/endpoint_models_by_brand_bad_request.png)
 
 ## PUT: models
-- URL: **localhost:8000/v1/brands/:brand_name/models**
+- URL: **{{BASE_URL}}/v1/brands/:brand_name/models**
 - Body: `{"average_price": 999999}` (JSON)
 - Query Params: N/A
 - Path Variables: brand_name (str)
@@ -203,7 +241,7 @@ STATUS 404 NOT FOUND
 ![Consumo de endpoint models.](img_docs/endpoint_models_put_not_found.png)
 
 ## GET: models
-- URL: **localhost:8000/v1/models?greater=400000&lower=380000**
+- URL: **{{BASE_URL}}/v1/models?greater=400000&lower=380000**
 - Body: N/A
 - Query Params: greater & lower
 - Path Variables: N/A
@@ -212,6 +250,8 @@ STATUS 404 NOT FOUND
 
 # Mejoras y decisiones durante el desarrollo
 A continuación se listan las diferentes mejoras que se realizarían al proyecto en caso de contar con más tiempo:
+
+- Implementación de token de acceso para mejorar el control de acceso a los datos.
 - Implementación de páginación para un mejor consumo por parte de desarrolladores.
 - Más filtros para los endpoints de tipo GET.
 - Mejorar la documentación.
@@ -225,6 +265,7 @@ A continuación se listan las diferentes mejoras que se realizarían al proyecto
 - Implementación de otros métodos.
 - Mejora de la documentación generada por Swagger.
 - Archivo MAKE para automatizar el levantamiento del proyecto y reducir algunos pasos manuales.
+- Mejorar la corrida de test para ejecutar mediante archivo MAKE.
 
 A continuación se detallan algunas de las decisiones técnicas tomadas durante el desarrollo.
 
@@ -406,13 +447,21 @@ uvicorn src.main:app --reload
 
 # Otros comandos útiles
 # (ejecutar cuando no este ejecutando uvicorn src.main:app --reload)
+```
+# Correr los test (válido solo en modo manual)
+```python
 
-# Para correr ejecutar test
 poetry run pytest
 
-# Para ejecutar coverage
+# Para ejecutar test y coverage
 poetry run pytest --cov=src
+```
+Ejemplo de salida
+![Corrida de tests.](img_docs/nexus_test.png)
 
-# Para revisar el linting
+# Correr el linting (válido en todo el proyecto)
+```bash
 pre-commit run --all-files
 ```
+Ejemplo de salida
+![Corrida de linting.](img_docs/nexus_linting.png)
