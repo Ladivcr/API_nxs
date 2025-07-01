@@ -271,6 +271,8 @@ A continuación se listan las diferentes mejoras que se realizarían al proyecto
 - Mejora de la documentación generada por Swagger.
 - Archivo MAKE para automatizar el levantamiento del proyecto y reducir algunos pasos manuales.
 - Mejorar la corrida de test para ejecutar mediante archivo MAKE.
+- Mejorar el versionado. 
+- Añadir certificados SSL.
 
 A continuación se detallan algunas de las decisiones técnicas tomadas durante el desarrollo.
 
