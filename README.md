@@ -455,6 +455,7 @@ uvicorn src.main:app --reload
 # (ejecutar cuando no este ejecutando uvicorn src.main:app --reload)
 ```
 <h1 id="manual_test">Correr los test (válido solo en modo manual)</h1>
+
 ```python
 
 poetry run pytest
@@ -462,6 +463,7 @@ poetry run pytest
 # Para ejecutar test y coverage
 poetry run pytest --cov=src
 ```
+
 Ejemplo de salida
 ![Corrida de tests.](img_docs/nexus_test.png)
 
