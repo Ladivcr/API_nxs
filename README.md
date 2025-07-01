@@ -1,10 +1,12 @@
 # Nexus API - Prueba Técnica
-# Indice
-- Vista General
-- ¿Cómo correr este proyecto?
-- - Consumo Online
-- - Modo Dockerizado y recomendado
-- ¿Cómo consumir los endpoints?
+
+<h1 id="indice">Indice</h1>
+
+- [Vista General](#vista_general)
+- [¿Cómo correr este proyecto?](#run_project)
+- - [Consumo Online](#run_project)
+- - [Modo Dockerizado y recomendado](#config_docker)
+- [¿Cómo consumir los endpoints?](#consume_api)
 - - GET: health-check
 - - GET: brands
 - - GET: brands by models
@@ -12,16 +14,17 @@
 - - POST: Models by brand
 - - PUT: Models
 - - GET: Models
-- Mejoras y decisiones durante el desarrollo
-- Anexo
+- [Mejoras y decisiones durante el desarrollo](#improve_future)
+- [Anexo](#anexo)
 - - Montar el proyecto modo manual
-- - Ejecución de Test (válido solo en modo manual)
+- - [Ejecución de Test (válido solo en modo manual)](#manual_test)
 - - Ejecución del linting (válido en todo el proyecto)
 
-# Vista General
+<h1 id="fin">Vista General</h1>
+
 Proyecto realizado para llevar a cabo la prueba técnica de Nexus. Aquí encontrará el proceso para llevar a cabo el levantamiento del proyecto para validar su función. Así como observaciones, mejoras y decisiones técnicas tomadas durante el desarrollo.
 
-# ¿Cómo correr este proyecto?
+<h1 id="run_project">¿Cómo correr este proyecto?</h1>
 
 > NOTA: Si no quieres levantar el proyecto para probarlo en local. Puedes consumir la API directamente desde Internet. Pasa al apartado: **¿Cómo consumir los endpoints?** para ver cómo hacerlo.
 
@@ -29,7 +32,7 @@ Para poder llevar a cabo los siguientes pasos, es necesario contar con las sigui
 - Docker
 - Python >= 3.11, <4.0
 
-## Modo Dockerizado y recomendado
+<h2 id="config_docker">Modo Dockerizado y recomendado</h2>
 1. **Lo primero que se debe de realizar es la clonación de este proyecto.**
 
 > Por favor ejecuta los comandos en orden.
@@ -148,7 +151,9 @@ CREATE TABLE models (
     CONSTRAINT fk_brand FOREIGN KEY (brand_id) REFERENCES brands(id)
 );
 ```
-# ¿Cómo consumir los endpoints?
+<h1 id="consume_api">¿Cómo consumir los endpoints?</h1>
+
+[back to index](#indice)
 
 El entorno tiene seis endpoints:
 - GET - **{{BASE_URL}}/health-check**
@@ -248,7 +253,7 @@ STATUS 404 NOT FOUND
 ![Consumo de endpoint models.](img_docs/endpoint_get_filters.png)
 
 
-# Mejoras y decisiones durante el desarrollo
+<h1 id="improve_future">Mejoras y decisiones durante el desarrollo</h1>
 A continuación se listan las diferentes mejoras que se realizarían al proyecto en caso de contar con más tiempo:
 
 - Implementación de token de acceso para mejorar el control de acceso a los datos.
@@ -275,9 +280,10 @@ Para el uso de filtros mediante métodos GET se hace uso de consultas parámetri
 
 Como se habrá notado, en los métodos GET y POST (brands by models y models by brand respectivamente) se maneja como ID el nombre de la marca o del modelo y no el ID del registro en la base de datos. Esto se ha decidido así para aprovechar el hecho de que ambos campos, por la naturaleza del diseño, sus valores son únicos en la base de datos. Al hacer uso de esos campos y no del ID del registro per se, se mitiga una posible vulnerabilidad IDOR ([Insecure Direct Object Reference](https://blog.hackmetrix.com/insecure-direct-object-reference/)) [CWE-639](https://cwe.mitre.org/data/definitions/639.html).
 
+[back to index](#indice)
 
+<h1 id="anexo">Anexo</h1>
 
-# Anexo
 ## Montar el proyecto modo manual (Solo si tienes Python3.11) TL, DR
 Si quieres ejecutar este proyecto de manera local, para realizar pruebas o modificaciones. Hay preparativos que se deben realizar antes. Sigue los siguientes pasos en orden y al final tendrás el proyecto listo para probar de manera local.
 
@@ -448,7 +454,7 @@ uvicorn src.main:app --reload
 # Otros comandos útiles
 # (ejecutar cuando no este ejecutando uvicorn src.main:app --reload)
 ```
-# Correr los test (válido solo en modo manual)
+<h1 id="manual_test">Correr los test (válido solo en modo manual)</h1>
 ```python
 
 poetry run pytest
@@ -465,3 +471,5 @@ pre-commit run --all-files
 ```
 Ejemplo de salida
 ![Corrida de linting.](img_docs/nexus_linting.png)
+
+[back to index](#indice)
